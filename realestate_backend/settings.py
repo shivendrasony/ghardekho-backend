@@ -60,9 +60,20 @@ TEMPLATES = [{
 }]
 
 # Database — SQLite by default, PostgreSQL for production
+import os
+import dj_database_url
+
 USE_SQLITE = config('USE_SQLITE', default=True, cast=bool)
 
-if USE_SQLITE:
+if os.environ.get('DATABASE_URL'):
+    # Railway PostgreSQL — automatically milta hai
+    DATABASES = {
+        'default': dj_database_url.parse(
+            os.environ.get('DATABASE_URL'),
+            conn_max_age=600
+        )
+    }
+elif USE_SQLITE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -131,3 +142,12 @@ TIME_ZONE          = 'Asia/Kolkata'
 USE_I18N           = True
 USE_TZ             = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    DEBUG = False
+    ALLOWED_HOSTS = ['*']
+    CSRF_TRUSTED_ORIGINS = [
+        'https://*.railway.app',
+        'https://*.vercel.app',
+    ]
