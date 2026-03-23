@@ -66,11 +66,11 @@ import dj_database_url
 USE_SQLITE = config('USE_SQLITE', default=True, cast=bool)
 
 if os.environ.get('DATABASE_URL'):
-    # Railway PostgreSQL — automatically milta hai
     DATABASES = {
         'default': dj_database_url.parse(
             os.environ.get('DATABASE_URL'),
-            conn_max_age=600
+            conn_max_age=600,
+            ssl_require=True
         )
     }
 elif USE_SQLITE:
