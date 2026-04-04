@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY    = config('SECRET_KEY', default='django-insecure-change-this-in-production-please')
 DEBUG         = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: v.split(','))
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -144,8 +144,7 @@ USE_TZ             = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
-if os.environ.get('RAILWAY_ENVIRONMENT'):
-    DEBUG = False
+if not DEBUG:
     ALLOWED_HOSTS = ['*']
     CSRF_TRUSTED_ORIGINS = [
         'https://*.railway.app',
